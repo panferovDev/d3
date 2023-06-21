@@ -6,10 +6,10 @@ import { apiPostSubmitService } from '../../services';
 import { usePostDispatch } from '../../Contexts/HOCs/PostContextProvider';
 
 function PostForm(): JSX.Element {
-  const dispatch = usePostDispatch();
+  const dispatch = usePostDispatch(apiPostSubmitService);
 
   return (
-    <Form onSubmit={(e: PostSubmitEventType) => apiPostSubmitService(e, dispatch)}>
+    <Form onSubmit={dispatch}>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label>Title</Form.Label>
         <Form.Control type="text" name="title" placeholder="title" />

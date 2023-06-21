@@ -10,9 +10,6 @@ type PostContextProviderProp = {
 export default function PostContextProvider({ children }: PostContextProviderProp): JSX.Element {
   const [posts, postDispatch] = useReducer(postReducer, []);
 
-  useEffect(() => {
-    void apiPostGetAllService(postDispatch);
-  }, []);
 
   return (
     <PostContext.Provider value={posts}>
@@ -29,10 +26,13 @@ export const usePostContext = (): PostType[] => {
   return posts;
 };
 
-export const usePostDispatch = (): React.Dispatch<PostActionTypes> => {
+export const usePostDispatch = (
+  fn: (...args: unknown[]) => (dispatch: React.Dispatch<PostActionTypes>) => void,
+): ((...args: unknown[]) => void) => {
   const dispatch = useContext(PostContextDispatch);
   if (!dispatch) {
     throw new Error('no data in context');
   }
-  return dispatch;
+
+  return (...args: unknown[]) => fn(...args)(dispatch);
 };
